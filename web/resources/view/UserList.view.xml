@@ -1,0 +1,41 @@
+<mvc:View
+    controllerName="myapp.controller.UserList"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page
+        title="User Management"
+        class="sapUiResponsiveMargin">
+        <content>
+            <Table
+                id="userTable"
+                items="{/users}">
+                <columns>
+                    <Column>
+                        <Text text="ID" />
+                    </Column>
+                    <Column>
+                        <Text text="Name" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{id}" />
+                            <Text text="{name}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <footer>
+            <Toolbar>
+                <content>
+                    <Button
+                        text="Add User"
+                        press=".onAddUser"
+                        type="Emphasized"/>
+                </content>
+            </Toolbar>
+        </footer>
+    </Page>
+</mvc:View>

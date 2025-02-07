@@ -1,10 +1,13 @@
 {
+    "welcomeFile": "index.html",
+    "authenticationMethod": "route",
     "routes": [
       {
-        "source": "^/myapp/(.*)$",
+        "source": "^/user-service/(.*)$",
         "target": "$1",
-        "destination": "myapp"
+        "destination": "myapp-api",
+        "authenticationType": "xsuaa",
+        "csrfProtection": true
       }
     ]
   }
-  

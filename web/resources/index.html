@@ -1,51 +1,29 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <title>JavaScript Tutorial</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script>
-    function fetchCsrfToken(callback) {
-      jQuery.ajax({
-          url: '/myapp/users',
-          type: 'HEAD',
-          headers: { 'x-csrf-token': 'fetch' }
-        })
-        .done(function(message, text, jqXHR) {
-          callback(jqXHR.getResponseHeader('x-csrf-token'))
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          alert('Error fetching CSRF token: ' + jqXHR.status + ' ' + errorThrown);
-        });
-    }
-
-    function addNewUser(token) {
-      var name = jQuery('#name').val() || '--';
-      jQuery.ajax({
-          url: '/myapp/users',
-          type: 'POST',
-          headers: { 'x-csrf-token': token },
-          contentType: 'application/json',
-          data: JSON.stringify({ name: name })
-        })
-        .done(function() {
-          alert( 'success' );
-          window.location = '/myapp/users'
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          alert('Error adding new user: ' + jqXHR.status + ' ' + errorThrown);
-        });
-    }
-
-    function addUser() {
-      fetchCsrfToken(addNewUser);
-    }
-  </script>
+    <meta charset="utf-8">
+    <title>User Management App</title>
+    
+    <!-- SAPUI5 Bootstrap -->
+    <script
+        id="sap-ui-bootstrap"
+        src="https://sdk.openui5.org/resources/sap-ui-core.js"
+        data-sap-ui-theme="sap_fiori_3"
+        data-sap-ui-libs="sap.m, sap.ui.core, sap.ui.support"
+        data-sap-ui-compatVersion="edge"
+        data-sap-ui-async="true"
+        data-sap-ui-resourceroots='{
+            "myapp": "./"
+        }'
+        data-sap-ui-oninit="module:sap/ui/core/ComponentSupport">
+    </script>
 </head>
-<body>
-  <h1>My Node.js Tutorial</h1>
-  <a href="/myapp/users">Show users</a>
-  <br/>
-  <br/>
-  <input type="text" id="name" placeholder="Type user name"></input>
-  <input type="button" value="Add User" onClick="javascript: addUser()"></input>
+<body class="sapUiBody">
+    <div data-sap-ui-component
+        data-name="myapp"
+        data-id="container"
+        data-settings='{"id" : "myapp"}'
+        data-handle-validation="true">
+    </div>
 </body>
 </html>

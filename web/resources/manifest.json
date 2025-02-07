@@ -1,0 +1,90 @@
+{
+    "_version": "1.12.0",
+    "sap.app": {
+        "id": "myapp",
+        "type": "application",
+        "title": "User Management App",
+        "applicationVersion": {
+            "version": "1.0.0"
+        },
+        "dataSources": {
+            "userService": {
+                "uri": "/myapp/users",
+                "type": "JSON"
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "rootView": {
+            "viewName": "myapp.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "app"
+        },
+        "dependencies": {
+            "minUI5Version": "1.60.0",
+            "libs": {
+                "sap.m": {
+                    "lazy": false
+                },
+                "sap.ui.core": {
+                    "lazy": false
+                },
+                "sap.ui.layout": {
+                    "lazy": false
+                }
+            }
+        },
+        "models": {
+            "": {
+                "type": "sap.ui.model.json.JSONModel",
+                "dataSource": "userService"
+            },
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "myapp.i18n.i18n"
+                }
+            }
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "viewPath": "myapp.view",
+                "controlId": "app",
+                "controlAggregation": "pages",
+                "async": true,
+                "bypassed": {
+                    "target": "notFound"
+                }
+            },
+            "routes": [
+                {
+                    "pattern": "",
+                    "name": "userList",
+                    "target": "userList"
+                }
+            ],
+            "targets": {
+                "userList": {
+                    "viewName": "UserList",
+                    "viewLevel": 1,
+                    "viewId": "userList"
+                }
+            }
+        }
+    }
+}

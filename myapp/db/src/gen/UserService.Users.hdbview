@@ -1,0 +1,8 @@
+VIEW UserService_Users AS SELECT
+  Users_0.ID,
+  Users_0.createdAt,
+  Users_0.createdBy,
+  Users_0.modifiedAt,
+  Users_0.modifiedBy,
+  Users_0.name
+FROM myapp_db_Users AS Users_0

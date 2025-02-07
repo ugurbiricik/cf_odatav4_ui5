@@ -1,44 +1,46 @@
+const cds = require('@sap/cds');
 const express = require('express');
 const passport = require('passport');
-const bodyParser = require('body-parser');
 const xsenv = require('@sap/xsenv');
-const { createSecurityContext, requests, constants, TokenInfo, JWTStrategy } = require("@sap/xssec").v3;
+const JWTStrategy = require('@sap/xssec').JWTStrategy;
 
-const users = require('./users.json');
-const app = express();
+async function startApplication() {
+    // Express app oluştur
+    const app = express();
 
-const services = xsenv.getServices({ uaa: 'nodeuaa' });
+    try {
+        // XSUAA service konfigürasyonu (cloud için)
+        if (process.env.VCAP_SERVICES) {
+            const xsuaaService = xsenv.getServices({ uaa: 'nodeuaa' });
+            passport.use(new JWTStrategy(xsuaaService.uaa));
+            app.use(passport.initialize());
+        }
 
-passport.use(new JWTStrategy(services.uaa));
+        app.use(express.json());
 
-app.use(bodyParser.json());
-app.use(passport.initialize());
-app.use(passport.authenticate('JWT', { session: false }));
+        // CDS servisleri başlat
+        await cds.connect.to('db'); // Veritabanı bağlantısı
+        const service = await cds.serve('UserService').in(app);
 
-app.get('/users', function (req, res) {
-  var isAuthorized = req.authInfo.checkLocalScope('Display');
-  if (isAuthorized) {
-    res.status(200).json(users);
-  } else {
-    res.status(403).send('Forbidden');
-  }
-});
+        // CORS ayarları (development için)
+        if (process.env.NODE_ENV !== 'production') {
+            app.use((req, res, next) => {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+                res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+                next();
+            });
+        }
 
-app.post('/users', function (req, res) {
-  const isAuthorized = req.authInfo.checkLocalScope('Update');
-  if (!isAuthorized) {
-    res.status(403).json('Forbidden');
-    return;
-  }
+    } catch (err) {
+        console.error('Error starting services:', err);
+    }
 
-  var newUser = req.body;
-  newUser.id = users.length;
-  users.push(newUser);
+    // Port ayarı
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    });
+}
 
-  res.status(201).json(newUser);
-});
-
-const port = process.env.PORT || 3000;
-app.listen(port, function () {
-  console.log('myapp listening on port ' + port);
-});
+startApplication().catch(console.error);

@@ -29,9 +29,13 @@
         }
     ],
     "oauth2-configuration": {
+        "credential-types": [
+            "binding-secret",
+            "x509"
+        ],
         "redirect-uris": [
-            "https://web-busy-gazelle-tn.cfapps.eu20-001.hana.ondemand.com/**",
-            "https://myapp-intelligent-serval-jm.cfapps.eu20-001.hana.ondemand.com/**"
+            "https://myapp-intelligent-serval-jm.cfapps.eu20-001.hana.ondemand.com/**",
+            "https://*.hana.ondemand.com"
         ]
     }
 }
