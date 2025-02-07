@@ -1,0 +1,37 @@
+{
+    "xsappname": "myapp",
+    "tenant-mode": "dedicated",
+    "scopes": [
+        {
+            "name": "$XSAPPNAME.Display",
+            "description": "Display Users"
+        },
+        {
+            "name": "$XSAPPNAME.Update",
+            "description": "Update Users"
+        }
+    ],
+    "role-templates": [
+        {
+            "name": "Viewer",
+            "description": "View Users",
+            "scope-references": [
+                "$XSAPPNAME.Display"
+            ]
+        },
+        {
+            "name": "Manager",
+            "description": "Maintain Users",
+            "scope-references": [
+                "$XSAPPNAME.Display",
+                "$XSAPPNAME.Update"
+            ]
+        }
+    ],
+    "oauth2-configuration": {
+        "redirect-uris": [
+            "https://web-busy-gazelle-tn.cfapps.eu20-001.hana.ondemand.com/**",
+            "https://myapp-intelligent-serval-jm.cfapps.eu20-001.hana.ondemand.com/**"
+        ]
+    }
+}
